@@ -28,7 +28,8 @@ fra() {
   flutter run -d all --flavor staging -t lib/main_staging.dart
 }
 
-# Get a list of connected devices/simulators and choose which one to run
+# Get a list of connected devices and choose which one to run
+# If only one simulator/emulator is present, run that one
 fr() {
   rawDevicesFile=$TMPDIR"fdOutput.txt"
   trap "rm $fdOutputLocation" EXIT
@@ -71,6 +72,14 @@ fr() {
   flutter run -d $deviceId --flavor staging -t lib/main_staging.dart
 }
 
+frp() {
+  iosDeviceId=(fGetDeviceId ios)
+  echo $iosDeviceId
+
+}
+## WIP Need to be translated from Fish to bash ##
+
+
 # # Function to run a `--profile` build on all available physical devices
 # # TODO: When iPhone device is found, Android device will not be triggered.
 # function frp
@@ -94,6 +103,21 @@ fr() {
 #     echo "No physical Android device found!"
 #   end
 # end
+
+# getDeviceId() { 
+  # tmp=$TMPDIR"tmp.txt"
+  # fd > $tmp
+  
+  # if [ $argv = ios ]; then
+  #   # Lookup for physical iPhone device
+  #   device=$(echo | grep -v "simulator" $tmp | grep ios)
+  # else if [ $argv = android ]; then
+  #   # Lookup for physical Android device
+  #   device=$(echo | grep -v "emulator" $fileLocation | grep android)
+  # fi
+
+  # echo $device | cut -d'•' -f 2 | tr -d '[:space:]'
+# }
 
 # function fGetDeviceId
 #   set fileLocation $TMPDIR/devices.txt
