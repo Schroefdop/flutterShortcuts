@@ -2,15 +2,19 @@
 # Multiple handy terminal commands to use with Flutter!
 # ----------------------
 
-alias fd='flutter devices'
-alias fpg='flutter packages get'
-alias frb='flutter pub run build_runner build --delete-conflicting-outputs' # Auto generate files
-alias frw='flutter pub run build_runner watch' # Auto generate files continuous
-alias frl10n='flutter pub run intl_translation:extract_to_arb --output-dir=lib/foundation/locale lib/foundation/locale/locales.dart'
-alias frtranslate='flutter pub run intl_translation:generate_from_arb --output-dir=lib/foundation/locale --generated-file-prefix=.g. --no-use-deferred-loading lib/foundation/locale/intl_en.arb lib/foundation/locale/intl_nl.arb lib/foundation/locale/intl_messages.arb lib/foundation/locale/locales.dart'
+alias fd="flutter devices"
+alias fpg="flutter packages get"
+alias frb="flutter pub run build_runner build --delete-conflicting-outputs" # Auto generate files
+alias frw="flutter pub run build_runner watch" # Auto generate files continuous
+alias frl10n="flutter pub run intl_translation:extract_to_arb --output-dir=lib/foundation/locale lib/foundation/locale/locales.dart"
+alias frtranslate="flutter pub run intl_translation:generate_from_arb --output-dir=lib/foundation/locale --generated-file-prefix=.g. --no-use-deferred-loading lib/foundation/locale/intl_en.arb lib/foundation/locale/intl_nl.arb lib/foundation/locale/intl_messages.arb lib/foundation/locale/locales.dart"
+
+FLUTTER_FLAVOR_PREFIX="--flavor"
+FLUTTER_FLAVOR_NAME="${FLUTTER_FLAVOR_NAME=""}"
+FLUTTER_START_FILE="${FLUTTER_START_FILE=""}"
 
 fra() {
-  printf "⏳ Starting '%s"${PWD##*/}"' on following devices:\n"
+  printf "⏳ Starting "%s"${PWD##*/}"" on following devices:\n"
 
   rawDevicesFile=$TMPDIR"fdOutput.txt"
   trap "rm $fdOutputLocation" EXIT
@@ -21,11 +25,10 @@ fra() {
   fd > $rawDevicesFile | tail -n+3 > $devicesFile
 
   while read line; do
-    echo $line | cut -d '•' -f1 | sed 's/^[ \t]*//;s/[ \t]*$//'
+    echo $line | cut -d "•" -f1 | sed "s/^[ \t]*//;s/[ \t]*$//"
   done < $devicesFile
 
-  open -a simulator
-  flutter run -d all --flavor staging -t lib/main_staging.dart
+  launchApp all
 }
 
 # Get a list of connected devices and choose which one to run
@@ -41,7 +44,7 @@ fr() {
   deviceId=
   
   if [ $devicesCount -eq 1 ] ; then
-    deviceId=$(cat $rawDevicesFile | tail -1 | cut -d'•' -f 2 | tr -d '[:space:]')
+    deviceId=$(cat $rawDevicesFile | tail -1 | cut -d"•" -f 2 | tr -d "[:space:]")
   else
     devicesFile=$TMPDIR"devices.txt"
     trap "rm $devicesFile" EXIT
@@ -53,23 +56,31 @@ fr() {
     # Loop all lines in the file containing the devices and prepend a number
     n=1
     while read line; do 
-      echo $n. $line
+      deviceName=$(echo $line | cut -d "•" -f1 | sed "s/^[ \t]*//;s/[ \t]*$//")
+      echo $n. $deviceName
       n=$((n+1))
     done < $devicesFile
 
     # Read the user input and read the corresponding line in the file of devices
-    printf 'Device number: '
+    printf "Device number: "
     read tmp
 
     # Filter the deviceId from the chosen line
     device=$(head -$tmp $devicesFile | tail -1)
-    deviceId=$(echo $device | cut -d '•' -f2 | tr -d '[:space:]')
-    deviceName=$(echo $device | cut -d '•' -f1 | sed 's/^[ \t]*//;s/[ \t]*$//') # Remove leading and trailing whitespaces
+    deviceId=$(echo $device | cut -d "•" -f2 | tr -d "[:space:]")
+    deviceName=$(echo $device | cut -d "•" -f1 | sed "s/^[ \t]*//;s/[ \t]*$//") # Remove leading and trailing whitespaces
   fi
 
-  printf "⏳ Starting '%s"${PWD##*/}"' on $deviceName...\n"
-  open -a simulator
-  flutter run -d $deviceId --flavor staging -t lib/main_staging.dart
+  setFlutterFlavor
+
+  FLAVOR_PRINT=" with flavor '$FLUTTER_FLAVOR_NAME'"
+  if [ -z $FLUTTER_FLAVOR_NAME ] ; then
+    FLAVOR_PRINT=""
+  fi
+  
+  printf "⏳ Starting "%s"${PWD##*/}"" on $deviceName$FLAVOR_PRINT...\n"
+
+  launchApp $deviceId
 }
 
 frp() {
@@ -77,6 +88,20 @@ frp() {
   echo $iosDeviceId
 
 }
+
+launchApp() {
+  setFlutterFlavor
+  open -a simulator
+  flutter run -d $argv $FLUTTER_FLAVOR_PREFIX $FLUTTER_FLAVOR_NAME -t $FLUTTER_START_FILE
+}
+
+setFlutterFlavor() {
+  if [ -z $FLUTTER_FLAVOR_NAME ]; then
+    FLUTTER_FLAVOR_PREFIX=""
+    FLUTTER_FLAVOR_NAME=""
+  fi
+}
+
 ## WIP Need to be translated from Fish to bash ##
 
 
@@ -116,7 +141,7 @@ frp() {
   #   device=$(echo | grep -v "emulator" $fileLocation | grep android)
   # fi
 
-  # echo $device | cut -d'•' -f 2 | tr -d '[:space:]'
+  # echo $device | cut -d"•" -f 2 | tr -d "[:space:]"
 # }
 
 # function fGetDeviceId
@@ -131,5 +156,5 @@ frp() {
 #     set device (grep -v "emulator" $fileLocation | grep android)
 #   end
 
-#   echo $device | cut -d'•' -f 2 | tr -d '[:space:]'
+#   echo $device | cut -d"•" -f 2 | tr -d "[:space:]"
 # end
