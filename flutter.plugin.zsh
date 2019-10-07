@@ -67,7 +67,7 @@ fr() {
     deviceName=$(echo $device | cut -d '•' -f1 | sed 's/^[ \t]*//;s/[ \t]*$//') # Remove leading and trailing whitespaces
   fi
 
-  printf "⏳ Starting '%s"${PWD##*/}"' on $deviceName..."
+  printf "⏳ Starting '%s"${PWD##*/}"' on $deviceName...\n"
   open -a simulator
   flutter run -d $deviceId --flavor staging -t lib/main_staging.dart
 }
