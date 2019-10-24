@@ -71,14 +71,14 @@ fr() {
     deviceName=$(echo $device | cut -d "•" -f1 | sed "s/^[ \t]*//;s/[ \t]*$//") # Remove leading and trailing whitespaces
   fi
 
-  setFlutterFlavor
+  setFlutterFlavorPrefix
 
   FLAVOR_PRINT=" with flavor '$FLUTTER_FLAVOR_NAME'"
   if [ -z $FLUTTER_FLAVOR_NAME ] ; then
     FLAVOR_PRINT=""
   fi
   
-  printf "⏳ Starting "%s"${PWD##*/}"" on $deviceName$FLAVOR_PRINT...\n"
+  printf "⏳ Starting '%s"${PWD##*/}"' on $deviceName$FLAVOR_PRINT...\n"
 
   launchApp $deviceId
 }
@@ -90,15 +90,14 @@ frp() {
 }
 
 launchApp() {
-  setFlutterFlavor
+  setFlutterFlavorPrefix
   open -a simulator
   flutter run -d $argv $FLUTTER_FLAVOR_PREFIX $FLUTTER_FLAVOR_NAME -t $FLUTTER_START_FILE
 }
 
-setFlutterFlavor() {
+setFlutterFlavorPrefix() {
   if [ -z $FLUTTER_FLAVOR_NAME ]; then
     FLUTTER_FLAVOR_PREFIX=""
-    FLUTTER_FLAVOR_NAME=""
   fi
 }
 
@@ -158,3 +157,22 @@ setFlutterFlavor() {
 
 #   echo $device | cut -d"•" -f 2 | tr -d "[:space:]"
 # end
+
+falias() {
+  # CWD=~/.oh-my-zsh/custom/plugins/flutter/flutter.plugin.zsh
+
+  # while read line; do
+  #   if [[ $line == "alias"* ]]; then
+  #     # echo $line
+  #   fi
+  # done < $CWD
+  
+  echo """
+${PURPLE}alias ${GREEN}fd${NOCOLOR}\n"flutter devices"
+${PURPLE}alias ${GREEN}fpg${NOCOLOR}\n"flutter packages get"
+${PURPLE}alias ${GREEN}frb${NOCOLOR}\n"flutter pub run build_runner build --delete-conflicting-outputs" # Auto generate files
+${PURPLE}alias ${GREEN}frw${NOCOLOR}\n"flutter pub run build_runner watch" # Auto generate files continuous
+${PURPLE}alias ${GREEN}frl10n${NOCOLOR}\n"flutter pub run intl_translation:extract_to_arb --output-dir=lib/foundation/locale lib/foundation/locale/locales.dart"
+${PURPLE}alias ${GREEN}frtranslate${NOCOLOR}\n"flutter pub run intl_translation:generate_from_arb --output-dir=lib/foundation/locale --generated-file-prefix=.g. --no-use-deferred-loading lib/foundation/locale/intl_en.arb lib/foundation/locale/intl_nl.arb lib/foundation/locale/intl_messages.arb lib/foundation/locale/locales.dart"
+  """
+}
