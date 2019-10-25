@@ -5,7 +5,7 @@
 alias fd="flutter devices"
 alias fpg="flutter packages get"
 alias frb="flutter pub run build_runner build --delete-conflicting-outputs" # Auto generate files
-alias frw="flutter pub run build_runner watch" # Auto generate files continuous
+alias frw="flutter pub run build_runner watch"                              # Auto generate files continuous
 alias frl10n="flutter pub run intl_translation:extract_to_arb --output-dir=lib/foundation/locale lib/foundation/locale/locales.dart"
 alias frtranslate="flutter pub run intl_translation:generate_from_arb --output-dir=lib/foundation/locale --generated-file-prefix=.g. --no-use-deferred-loading lib/foundation/locale/intl_en.arb lib/foundation/locale/intl_nl.arb lib/foundation/locale/intl_messages.arb lib/foundation/locale/locales.dart"
 
@@ -22,11 +22,11 @@ fra() {
   devicesFile=$TMPDIR"devices.txt"
   trap "rm $deviceFile" EXIT
 
-  fd > $rawDevicesFile | tail -n+3 > $devicesFile
+  fd >$rawDevicesFile | tail -n+3 >$devicesFile
 
   while read line; do
     echo $line | cut -d "•" -f1 | sed "s/^[ \t]*//;s/[ \t]*$//"
-  done < $devicesFile
+  done <$devicesFile
 
   launchApp all
 }
@@ -38,28 +38,28 @@ fr() {
   trap "rm $fdOutputLocation" EXIT
 
   # Get the device list with original `flutter devices` command
-  fd > $rawDevicesFile
-  
+  fd >$rawDevicesFile
+
   devicesCount=$(head -c 1 $rawDevicesFile)
   deviceId=
-  
-  if [ $devicesCount -eq 1 ] ; then
+
+  if [ $devicesCount -eq 1 ]; then
     deviceId=$(cat $rawDevicesFile | tail -1 | cut -d"•" -f 2 | tr -d "[:space:]")
   else
     devicesFile=$TMPDIR"devices.txt"
     trap "rm $devicesFile" EXIT
-  
-    cat $rawDevicesFile | tail -n+3 > $devicesFile
+
+    cat $rawDevicesFile | tail -n+3 >$devicesFile
 
     echo "Which device do you want to run?"
 
     # Loop all lines in the file containing the devices and prepend a number
     n=1
-    while read line; do 
+    while read line; do
       deviceName=$(echo $line | cut -d "•" -f1 | sed "s/^[ \t]*//;s/[ \t]*$//")
       echo $n. $deviceName
-      n=$((n+1))
-    done < $devicesFile
+      n=$((n + 1))
+    done <$devicesFile
 
     # Read the user input and read the corresponding line in the file of devices
     printf "Device number: "
@@ -74,10 +74,10 @@ fr() {
   setFlutterFlavorPrefix
 
   FLAVOR_PRINT=" with flavor '$FLUTTER_FLAVOR_NAME'"
-  if [ -z $FLUTTER_FLAVOR_NAME ] ; then
+  if [ -z $FLUTTER_FLAVOR_NAME ]; then
     FLAVOR_PRINT=""
   fi
-  
+
   printf "⏳ Starting '%s"${PWD##*/}"' on $deviceName$FLAVOR_PRINT...\n"
 
   launchApp $deviceId
@@ -103,7 +103,6 @@ setFlutterFlavorPrefix() {
 
 ## WIP Need to be translated from Fish to bash ##
 
-
 # # Function to run a `--profile` build on all available physical devices
 # # TODO: When iPhone device is found, Android device will not be triggered.
 # function frp
@@ -128,19 +127,19 @@ setFlutterFlavorPrefix() {
 #   end
 # end
 
-# getDeviceId() { 
-  # tmp=$TMPDIR"tmp.txt"
-  # fd > $tmp
-  
-  # if [ $argv = ios ]; then
-  #   # Lookup for physical iPhone device
-  #   device=$(echo | grep -v "simulator" $tmp | grep ios)
-  # else if [ $argv = android ]; then
-  #   # Lookup for physical Android device
-  #   device=$(echo | grep -v "emulator" $fileLocation | grep android)
-  # fi
+# getDeviceId() {
+# tmp=$TMPDIR"tmp.txt"
+# fd > $tmp
 
-  # echo $device | cut -d"•" -f 2 | tr -d "[:space:]"
+# if [ $argv = ios ]; then
+#   # Lookup for physical iPhone device
+#   device=$(echo | grep -v "simulator" $tmp | grep ios)
+# else if [ $argv = android ]; then
+#   # Lookup for physical Android device
+#   device=$(echo | grep -v "emulator" $fileLocation | grep android)
+# fi
+
+# echo $device | cut -d"•" -f 2 | tr -d "[:space:]"
 # }
 
 # function fGetDeviceId
@@ -166,7 +165,7 @@ falias() {
   #     # echo $line
   #   fi
   # done < $CWD
-  
+
   echo """
 ${PURPLE}alias ${GREEN}fd${NOCOLOR}\n"flutter devices"
 ${PURPLE}alias ${GREEN}fpg${NOCOLOR}\n"flutter packages get"
