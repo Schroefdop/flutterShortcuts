@@ -2,6 +2,7 @@
 # Multiple handy terminal commands to use with Flutter!
 # ----------------------
 
+alias fa="flutter analyze"
 alias fd="flutter devices"
 alias fpg="flutter packages get"
 alias frb="flutter pub run build_runner build --delete-conflicting-outputs" # Auto generate files
@@ -167,6 +168,7 @@ falias() {
   # done < $CWD
 
   echo """
+${PURPLE}alias ${GREEN}fa${NOCOLOR}\n"flutter analyze"
 ${PURPLE}alias ${GREEN}fd${NOCOLOR}\n"flutter devices"
 ${PURPLE}alias ${GREEN}fpg${NOCOLOR}\n"flutter packages get"
 ${PURPLE}alias ${GREEN}frb${NOCOLOR}\n"flutter pub run build_runner build --delete-conflicting-outputs" # Auto generate files
