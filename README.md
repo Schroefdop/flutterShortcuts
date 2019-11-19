@@ -1,27 +1,41 @@
-# (WIP) Shortcuts to quickly start Flutter project on simulators/emulators
+# Shortcuts to quickly start Flutter project on simulators/emulators
 
-This little script is to be used with `zsh`.
+This `oh-my-zsh` plugin add shortcuts for Flutter to your terminal
 
 ## How to install
-Open terminal and paste the following line.
 
-`git clone https://github.com/Schroefdop/flutterShortcuts.git ~/.oh-my-zsh/custom/plugins/flutter`
+### Prerequisites
+1. `zsh`
+2. [`oh-my-zsh`](https://github.com/robbyrussell/oh-my-zsh)
 
-After cloning is done, add the plugin to you `.zshrc` file.
-1. `vim ~/.zshrc`
-2. Add `flutter` to the plugins
-3. Save and quit
-4. Restart terminal
+### Installation
+Open terminal and paste the following lines. This will clone the repository to the right location, add `flutter` to the plugins located in `~/.zshrc` and restart your shell.
+
+```
+git clone https://github.com/Schroefdop/flutterShortcuts.git ~/.oh-my-zsh/custom/plugins/flutter
+while read line; do; if [[ $line == plugins* ]]; then; sed -i -e 's/)/ flutter)/g' ~/.zshrc; fi;  done < ~/.zshrc
+exec zsh
+```
+
+## Configuration
+
+For now there are two variables to configure.
+```
+FLUTTER_FLAVOR_NAME="staging"
+FLUTTER_START_FILE="lib/main_staging.dart"
+```
+
+These variables should be set in `~/.zshrc`.
+If these variables are not set, vanilla `flutter run -d <deviceId>` will run.
 
 ## How to use
 There are some aliases which shorten some of the longer Flutter commands
 ```
+alias fa='flutter analyze'
 alias fd='flutter devices'
 alias fpg='flutter packages get'
 alias frb='flutter pub run build_runner build --delete-conflicting-outputs' # Auto generate files
 alias frw='flutter pub run build_runner watch' # Auto generate files continuous
-alias frl10n='flutter pub run intl_translation:extract_to_arb --output-dir=lib/foundation/locale lib/foundation/locale/locales.dart'
-alias frtranslate='flutter pub run intl_translation:generate_from_arb --output-dir=lib/foundation/locale --generated-file-prefix=.g. --no-use-deferred-loading lib/foundation/locale/intl_en.arb lib/foundation/locale/intl_nl.arb lib/foundation/locale/intl_messages.arb lib/foundation/locale/locales.dart'
 ```
 
 The command `fra`, short for `flutter run all` will build and launch the application on all booted simulators/emulators.
