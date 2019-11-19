@@ -5,8 +5,8 @@
 alias fa="flutter analyze"
 alias fd="flutter devices"
 alias fpg="flutter packages get"
-alias frb="flutter pub run build_runner build --delete-conflicting-outputs" # Auto generate files
-alias frw="flutter pub run build_runner watch"                              # Auto generate files continuous
+alias frb="flutter pub run build_runner build --delete-conflicting-outputs" # Generate files
+alias frw="flutter pub run build_runner watch"                              # Generate files continuous
 alias frl10n="flutter pub run intl_translation:extract_to_arb --output-dir=lib/foundation/locale lib/foundation/locale/locales.dart"
 alias frtranslate="flutter pub run intl_translation:generate_from_arb --output-dir=lib/foundation/locale --generated-file-prefix=.g. --no-use-deferred-loading lib/foundation/locale/intl_en.arb lib/foundation/locale/intl_nl.arb lib/foundation/locale/intl_messages.arb lib/foundation/locale/locales.dart"
 
