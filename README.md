@@ -17,6 +17,17 @@ while read line; do; if [[ $line == plugins* ]]; then; sed -i -e 's/)/ flutter)/
 exec zsh
 ```
 
+## Configuration
+
+For now there are two variables to configure.
+```
+FLUTTER_FLAVOR_NAME="staging"
+FLUTTER_START_FILE="lib/main_staging.dart"
+```
+
+These variables should be set in `~/.zshrc`.
+If these variables are not set, vanilla `flutter run -d <deviceId>` will run.
+
 ## How to use
 There are some aliases which shorten some of the longer Flutter commands
 ```
