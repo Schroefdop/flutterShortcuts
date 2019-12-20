@@ -13,7 +13,7 @@ Open terminal and paste the following lines. This will clone the repository to t
 
 ```
 git clone https://github.com/Schroefdop/flutterShortcuts.git ~/.oh-my-zsh/custom/plugins/flutter
-while read line; do; if [[ $line == plugins* ]]; then; sed -i -e 's/)/ flutter)/g' ~/.zshrc; fi;  done < ~/.zshrc
+while read line; do; if [[ $line == plugins* ]]; then; sed -i -e 's/plugins=(/plugins=(flutter /g' ~/.zshrc; fi;  done < ~/.zshrc
 exec zsh
 ```
 
