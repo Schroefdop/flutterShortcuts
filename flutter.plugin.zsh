@@ -17,10 +17,10 @@ FLUTTER_START_FILE="${FLUTTER_START_FILE=""}"
 fra() {
   printf "⏳ Starting "%s"${PWD##*/}"" on following devices:\n"
 
-  rawDevicesFile=$TMPDIR"fdOutput.txt"
+  rawDevicesFile=$(mktemp)
   trap "rm $fdOutputLocation" EXIT
 
-  devicesFile=$TMPDIR"devices.txt"
+  devicesFile=$(mktemp)
   trap "rm $deviceFile" EXIT
 
   fd >$rawDevicesFile | tail -n+3 >$devicesFile
@@ -35,7 +35,7 @@ fra() {
 # Get a list of connected devices and choose which one to run
 # If only one simulator/emulator is present, run that one
 fr() {
-  rawDevicesFile=$TMPDIR"fdOutput.txt"
+  rawDevicesFile=$(mktemp)
   trap "rm $fdOutputLocation" EXIT
 
   # Get the device list with original `flutter devices` command
@@ -47,7 +47,7 @@ fr() {
   if [ $devicesCount -eq 1 ]; then
     deviceId=$(cat $rawDevicesFile | tail -1 | cut -d"•" -f 2 | tr -d "[:space:]")
   else
-    devicesFile=$TMPDIR"devices.txt"
+    devicesFile=$(mktemp)
     trap "rm $devicesFile" EXIT
 
     cat $rawDevicesFile | tail -n+3 >$devicesFile
